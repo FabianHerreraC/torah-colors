@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Mouse</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.1s ease;
+      cursor: none;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: overlay;
+    }
+
+    .info {
+      color: rgba(255, 255, 255, 0.8);
+      font-family: serif;
+      font-size: 48px;
+      text-align: center;
+      mix-blend-mode: overlay;
+      user-select: none;
+      direction: rtl;
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <p class="info" id="info">mueve el mouse</p>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const info = document.getElementById('info');
+
+    const torah = [
+      "בְּרֵאשִׁית", "אֱלֹהִים", "שָׁלוֹם", "אֱמֶת", "חַיִּים",
+      "בְּרָכָה", "תּוֹרָה", "אַהֲבָה", "אוֹר", "שַׁבָּת",
+      "קְדוֹשָׁה", "תְּשׁוּבָה", "רַחֲמִים", "אֱמוּנָה", "חֶסֶד",
+      "נְשָׁמָה", "גְּאֻלָּה", "שְׁכִינָה", "מִצְוָה", "עוֹלָם",
+      "יִשְׂרָאֵל", "יְרוּשָׁלַיִם", "מֶלֶךְ", "כָּבוֹד", "תִּקְוָה",
+      "צְדָקָה", "חָכְמָה", "דַּעַת", "בִּינָה", "שִׂמְחָה",
+      "שָׁלֵם", "גִּבּוֹר", "נֵס", "עֵדֶן", "מָשִׁיחַ",
+      "פֶּסַח", "סֻכָּה", "שׁוֹפָר", "מְנוֹרָה", "תְּפִלָּה"
+    ];
+
+    let lastWord = '';
+
+    function randomWord() {
+      let word;
+      do { word = torah[Math.floor(Math.random() * torah.length)]; }
+      while (word === lastWord);
+      lastWord = word;
+      return word;
+    }
+
+    let moveTimeout;
+
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      const hue = Math.round((x / window.innerWidth) * 360);
+      const lightness = Math.round(30 + (y / window.innerHeight) * 40);
+
+      document.body.style.backgroundColor = `hsl(${hue}, 80%, ${lightness}%)`;
+
+      cursor.style.left = x + 'px';
+      cursor.style.top = y + 'px';
+
+      clearTimeout(moveTimeout);
+      moveTimeout = setTimeout(() => {
+        info.textContent = randomWord();
+      }, 120);
+    });
+  </script>
+</body>
+</html>
