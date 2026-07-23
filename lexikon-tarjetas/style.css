@@ -1,0 +1,234 @@
+@font-face {
+  font-family: "Aminute";
+  src: url("fonts/Aminute.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --dark: #0D0020;
+  --red: #F10000;
+}
+
+/* All layout values below come from tarjeta.svg (1080x1920 artboard):
+   1 artboard unit = 100/1080 cqw horizontally, 100/1920 cqh vertically. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  background: var(--dark);
+  font-family: "Aminute", system-ui, sans-serif;
+  color: var(--dark);
+  overscroll-behavior: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* ---------- Card ---------- */
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  background: var(--red);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  container-type: size;            /* 1cqw = 1% of card width, 1cqh = 1% of height */
+  padding: 0;
+}
+
+/* left / right content margins from the artboard (32u / 41u) */
+:root { --padL: 2.963cqw; --padR: 3.796cqw; }
+
+/* fade / flip transition */
+.card.flipping { animation: flip .45s ease; }
+@keyframes flip {
+  0%   { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+  45%  { transform: perspective(1200px) rotateY(90deg); opacity: 0; }
+  55%  { transform: perspective(1200px) rotateY(-90deg); opacity: 0; }
+  100% { transform: perspective(1200px) rotateY(0deg); opacity: 1; }
+}
+
+/* house button: 5 very fast spins, then settle facing front */
+.card.spinning { animation: spin5 .7s cubic-bezier(.2,.6,.2,1); }
+@keyframes spin5 {
+  from { transform: perspective(1400px) rotateY(0deg); }
+  to   { transform: perspective(1400px) rotateY(1800deg); }   /* 5 turns */
+}
+
+/* ---------- Top bar: letter circle, top-right ---------- */
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  flex: 0 0 auto;
+  order: 0;
+  z-index: 3;
+  padding: calc(env(safe-area-inset-top) + var(--padL)) var(--padL) 0 var(--padL);
+}
+
+/* ---------- Bottom bar (controls) ---------- */
+.bottombar {
+  display: flex;
+  justify-content: space-between;   /* buttons left, letter circle right */
+  align-items: flex-end;
+  flex: 0 0 auto;
+  z-index: 3;
+  order: 2;                         /* keep it below the views regardless of DOM */
+  /* same inset (--padL) on the bottom and both sides: uniform frame */
+  padding: 0 var(--padL) calc(env(safe-area-inset-bottom) + var(--padL)) var(--padL);
+}
+
+.btns { display: flex; gap: 0.787cqw; }   /* 8.5u gap between buttons */
+
+/* house button sits equidistant between the icon buttons and the letter circle
+   (bottombar uses justify-content: space-between → equal gaps between the three) */
+.homebtn {
+  width: 11.111cqw;
+  height: 11.111cqw;
+  border: none;
+  background: transparent;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease;
+}
+.homebtn:active { transform: scale(.9); opacity: .6; }
+.homebtn svg { width: 82%; height: 82%; display: block; }
+
+.iconbtn {
+  width: 22.963cqw;                 /* 248u */
+  height: 22.963cqw;
+  border: none;
+  border-radius: 1.852cqw;          /* 20u corner radius */
+  background: var(--dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .12s ease, filter .12s ease;
+}
+.iconbtn:active { transform: scale(.94); filter: brightness(1.15); }
+.iconbtn svg { width: 5.741cqw; height: 5.741cqw; display: block; }  /* 62u icon box */
+
+.letter {
+  width: 11.111cqw;                 /* Ø120u */
+  height: 11.111cqw;
+  border-radius: 50%;
+  border: 0.556cqw solid var(--dark);   /* 6u stroke */
+  background: transparent;
+  color: var(--dark);
+  font-size: 6.667cqw;              /* 72u */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  cursor: default;
+  font-family: "Aminute", sans-serif;
+}
+.letter > span { display: block; }   /* glyph gets the optical-centring nudge */
+
+/* ---------- Views ---------- */
+.view {
+  flex: 1 1 auto;
+  display: flex;
+  position: relative;
+  z-index: 2;
+  min-height: 0;
+  order: 1;                         /* between the top bar (circle) and the bottom bar */
+  /* small gap below the circle row; --padL sides; air above the bottom bar */
+  padding: 3cqh var(--padL) 6cqh var(--padL);
+}
+.view[hidden] { display: none; }
+
+/* FRONT — big term, now top-aligned (buttons live at the bottom).
+   font-size is set by fitBegriff() so each term takes the largest size that
+   fits the invisible box: --padL from the top, air above the buttons below,
+   and clearance from the rail on the right. */
+.view-front {
+  align-items: flex-start;
+}
+.begriff {
+  font-size: 34cqw;
+  /* line-height 1.0 keeps every glyph (descenders of g/y/(), umlauts) inside
+     its own line box, so nothing bleeds below the text. It also makes long
+     terms — which need more, taller lines — resolve to a smaller size. */
+  line-height: 1.0;
+  letter-spacing: -0.005em;
+  font-weight: normal;
+  color: var(--dark);
+  overflow-wrap: anywhere;    /* wrap to fill the height (mid-word, like the artboard) */
+  width: 100%;
+  padding-block: 0.16em;      /* reserve room for glyph ink that exceeds the em box */
+}
+
+/* DESC */
+.view-desc { align-items: flex-start; }  /* top-aligned */
+.beschreibung {
+  font-size: clamp(20px, 6.4cqw, 32px);
+  line-height: 1.22;
+  color: var(--dark);
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* MAP — Verwandte Begriffe: words rotated 90°, in a row */
+.view-map { align-items: stretch; }
+.mapstage {
+  width: 100%;
+  height: 100%;
+}
+/* each word is set vertically (glyphs rotated 90°); the row lines them up */
+.rel-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4cqw;
+  height: 100%;
+  overflow-x: auto;
+}
+.rel {
+  writing-mode: vertical-rl;      /* rotates the word 90° */
+  color: var(--dark);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: "Aminute", sans-serif;
+  font-size: clamp(22px, 7cqw, 40px);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: opacity .12s ease;
+}
+.rel.is-link { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.rel:not(.is-link) { cursor: default; }
+.rel:active { opacity: .5; }
+
+/* HOME / presentation card */
+.view-home { align-items: flex-start; }
+.home-content { width: 100%; }
+.home-title {
+  font-size: 20cqw;
+  line-height: 0.9;
+  font-weight: normal;
+  color: var(--dark);
+  margin-bottom: 0.4em;
+}
+.home-text {
+  font-size: clamp(20px, 6.4cqw, 32px);
+  line-height: 1.15;
+  color: var(--dark);
+  max-width: 82%;
+}

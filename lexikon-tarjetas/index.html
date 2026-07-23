@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Lexikon relacional</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="card" class="card">
+    <!-- top bar: letter circle, top-right -->
+    <header class="topbar">
+      <button class="letter" id="letter" aria-label="Buchstabe"><span id="letterGlyph">B</span></button>
+    </header>
+
+    <!-- FRONT: Begriff (top) -->
+    <section class="view view-front" id="view-front">
+      <h1 class="begriff" id="begriff">Begriff</h1>
+    </section>
+
+    <!-- DESC: Beschreibung -->
+    <section class="view view-desc" id="view-desc" hidden>
+      <p class="beschreibung" id="beschreibung"></p>
+    </section>
+
+    <!-- MAP: Verwandte Begriffe -->
+    <section class="view view-map" id="view-map" hidden>
+      <div class="mapstage" id="mapstage"></div>
+    </section>
+
+    <!-- HOME: Präsentation -->
+    <section class="view view-home" id="view-home" hidden>
+      <div class="home-content">
+        <h1 class="home-title">Lexikon<br>relacional</h1>
+        <p class="home-text">Ein Wörterbuch dekolonialer Begriffe, als Karten.</p>
+      </div>
+    </section>
+
+    <!-- bar with the controls (bottom) -->
+    <footer class="bottombar">
+      <nav class="btns" id="btns"></nav>
+      <button class="homebtn" id="homebtn" aria-label="Startseite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M3 11.2 L12 3.5 L21 11.2" />
+          <path d="M5.3 9.4 V20 H18.7 V9.4" />
+          <path d="M9.8 20 V13.8 H14.2 V20" />
+        </svg>
+      </button>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
