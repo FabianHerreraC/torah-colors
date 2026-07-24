@@ -17,11 +17,14 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  height: 100%;
-  background: var(--dark);
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  background: var(--red);
   font-family: "Aminute", system-ui, sans-serif;
   color: var(--dark);
   overscroll-behavior: none;
+  overflow: hidden;            /* no document scroll -> bottom bar can't slide off in Safari */
 }
 
 body {
@@ -35,7 +38,12 @@ body {
   position: relative;
   width: 100%;
   max-width: 480px;
-  min-height: 100dvh;
+  /* fixed to the *visible* viewport height (not min-height) so a tall term can
+     never grow the card past the screen and push the bottom bar off — a Safari
+     mobile issue with the dynamic toolbar. Fallbacks first, then dvh. */
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
   background: var(--red);
   display: flex;
   flex-direction: column;
