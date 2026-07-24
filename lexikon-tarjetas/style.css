@@ -20,7 +20,7 @@ html, body {
   height: 100vh;
   height: 100svh;
   height: 100dvh;
-  background: var(--red);
+  background: var(--dark);     /* dark backdrop behind the card -> visible while it spins */
   font-family: "Aminute", system-ui, sans-serif;
   color: var(--dark);
   overscroll-behavior: none;
