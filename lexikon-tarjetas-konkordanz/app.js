@@ -11,6 +11,8 @@ const els = {
   count: document.getElementById("count"),
   backTitle: document.getElementById("backTitle"),
   frags: document.getElementById("frags"),
+  home: document.getElementById("home"),
+  homebtn: document.getElementById("homebtn"),
 };
 
 // ---------- render ----------
@@ -70,30 +72,38 @@ function randomTerm(dir) {           // dir: +1 left, -1 right
   let next = cur;
   if (TERMS.length > 1) while (next === cur) next = Math.floor(Math.random() * TERMS.length);
 
-  // if showing the back, drop to front first (no flip animation), then slide
   els.card.classList.remove("flipped");
   flipped = false;
 
   const c = els.card;
-  c.classList.add("sliding");
-  c.style.transform = `translateX(${-dir * 45}px)`;
-  c.style.opacity = "0";
-  setTimeout(() => {
-    cur = next;
-    render();
-    c.style.transition = "none";
-    c.style.transform = `translateX(${dir * 45}px)`;
-    void c.offsetWidth;
-    c.classList.add("sliding");
-    c.style.transform = "translateX(0)";
-    c.style.opacity = "1";
-    setTimeout(() => { c.classList.remove("sliding"); c.style.transform = ""; busy = false; }, 200);
-  }, 160);
+  const cls = dir > 0 ? "spinY" : "spinYr";      // spin in the swipe direction
+  c.classList.add(cls);
+  setTimeout(() => { cur = next; render(); }, 250);   // swap term mid-spin (edge-on)
+  setTimeout(() => { c.classList.remove("spinY", "spinYr"); busy = false; }, 510);
 }
+
+// ---------- home / presentation (square button) ----------
+let atHome = false;
+function goHome() {
+  atHome = true;
+  els.card.classList.remove("flipped"); flipped = false;
+  els.card.classList.remove("homespin"); void els.card.offsetWidth;
+  els.card.classList.add("homespin");          // spin many times
+  setTimeout(() => { els.home.classList.add("open"); }, 780);
+}
+function leaveHome() {
+  atHome = false;
+  els.home.classList.remove("open");
+}
+els.homebtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  atHome ? leaveHome() : goHome();
+});
 
 // ---------- gestures ----------
 let sw = null;
 els.scene.addEventListener("pointerdown", (e) => {
+  if (atHome || e.target === els.homebtn) { sw = null; return; }
   sw = { x: e.clientX, y: e.clientY };
 });
 els.scene.addEventListener("pointerup", (e) => {
