@@ -1,0 +1,86 @@
+@font-face {
+  font-family: "Aminute";
+  src: url("fonts/Aminute.otf") format("opentype");
+  font-weight: normal; font-style: normal; font-display: swap;
+}
+
+:root { --dark: #0D0020; --red: #F10000; --pad: 6.4vw; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100vh; height: 100svh; height: 100dvh;
+  background: var(--dark);
+  font-family: "Aminute", system-ui, sans-serif;
+  color: var(--dark);
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+body { display: flex; justify-content: center; align-items: stretch; }
+
+/* ---------- 3D scene ---------- */
+.scene {
+  position: relative;
+  width: 100%; max-width: 480px;
+  height: 100vh; height: 100svh; height: 100dvh;
+  perspective: 1600px;
+  touch-action: none;
+}
+.card3d {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.card3d.flipped { transform: rotateX(180deg); }
+.card3d.sliding { transition: transform .16s ease, opacity .16s ease; }
+
+.face {
+  position: absolute; inset: 0;
+  background: var(--red);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + var(--pad)) var(--pad)
+           calc(env(safe-area-inset-bottom) + var(--pad));
+  overflow: hidden;
+}
+.face-back { transform: rotateX(180deg); }
+
+/* ---------- FRONT ---------- */
+.term-box { flex: 1 1 auto; min-height: 0; display: flex; align-items: flex-start; }
+.term {
+  font-size: 20vw;              /* set precisely by fitTerm() */
+  line-height: 1;
+  font-weight: normal;
+  overflow-wrap: anywhere;
+  width: 100%;
+}
+.def {
+  flex: 0 0 auto;
+  font-size: clamp(15px, 4.2vw, 20px);
+  line-height: 1.3;
+  max-height: 34%;
+  overflow-y: auto;
+  margin-top: 3vw;
+  padding-top: 3vw;
+  border-top: 2px solid var(--dark);
+}
+.foot {
+  flex: 0 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 3vw;
+  font-size: 13px; opacity: .8;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.foot .cue { opacity: .9; }
+
+/* ---------- BACK ---------- */
+.back-title { font-size: clamp(24px, 8vw, 40px); line-height: .98; font-weight: normal; overflow-wrap: anywhere; }
+.back-sub { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; opacity: .6; margin: 6px 0 8px; display: block; }
+.frags { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.frag { border-top: 2px solid var(--dark); padding: 10px 0 11px; }
+.frag-src { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; margin-bottom: 4px; }
+.frag-txt { font-size: clamp(14px, 4vw, 18px); line-height: 1.3; }
+.frag.empty .frag-src { opacity: .35; }
+.frag.empty .frag-txt { opacity: .35; font-style: italic; }
