@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lexikon relacional — Konkordanz</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <svg id="graph" aria-label="Konkordanz-Konstellation">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F10000" stop-opacity="0.16"/>
+          <stop offset="60%" stop-color="#F10000" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="#F10000" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g id="viewport">
+        <ellipse id="glowEllipse" fill="url(#glow)"></ellipse>
+        <g id="edges"></g>
+        <g id="terms"></g>
+        <g id="sources"></g>
+      </g>
+    </svg>
+
+    <header class="masthead">
+      <span class="mast-title">Lexikon relacional</span>
+      <span class="mast-sub">Konkordanz · 72 Begriffe × 6 Quellen</span>
+    </header>
+
+    <nav class="alphabet" id="alphabet" aria-label="Alphabet"></nav>
+
+    <p class="hint">Toca un término para ver sus fragmentos · toca una fuente para resaltar · arrastra / rueda</p>
+
+    <aside class="panel" id="panel" hidden>
+      <button class="panel-close" id="panelClose" aria-label="Schließen">×</button>
+      <h2 class="panel-title" id="panelTitle">Begriff</h2>
+      <p class="panel-def" id="panelDef"></p>
+      <div class="frags" id="panelFrags"></div>
+    </aside>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="graph.js"></script>
+</body>
+</html>
